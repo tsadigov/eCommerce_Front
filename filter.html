@@ -1,134 +1,131 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
+<html lang="en">
+
+<head>
     <meta charset="utf-8">
-    <title>Search</title>
+    <title>E-Commerce</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" 
-      rel="stylesheet" 
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" 
-      crossorigin="anonymous">
-    
-    <link rel="stylesheet" type="text/css" href="styles/index-style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  </head>
-  <body>
-    
-    <header></header>
+    rel="stylesheet" 
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" 
+    crossorigin="anonymous">
 
-    <div class="container">
-      
-      <div class="row">
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
 
-        <div class="col-2 border-1">
-          
-          <div class="row mb-2" style="font-size: x-large;">
-            <p>Kateqoriyalar</p>
-          </div>
-          <div class="row" id="category-list">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 
-          </div>
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
-        </div>
-        <div class="col-10 p-2" id="product-list">
-          <!-- Products loaded here -->
-        </div>
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
 
-      </div>
-
-    </div>
-
-    <script type="text/javascript" src="./js/constants.js"></script> 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" 
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
-            crossorigin="anonymous"></script>
-
-    <script>
-
-      $(window).ready(function(){
-          
-        var search_url = ipAddress.ip+'/api/product/filter/'+sessionStorage['subCategoryId'];
-        var url = ipAddress.ip+'/api/product';
-        var productList = document.getElementById("product-list");
+<body>
+    <!-- Topbar Start -->
+    <header>
         
-        $.ajax({
-          type: 'GET',
-          url: search_url,
-          dataType:'json',
-          success:function(data, textStatus, jqXHR){
-            
-            console.log("Data123: ",data);
-            var access_token = sessionStorage['access_token'];
-            console.log("Index page: ",access_token);
-            if(data.length !== 0){
-              $.each(data, function(index, item){
-                // $.each(item, function(key, value){
-                  if(item["amount"] == 0)
-                    $('#product-list').append(
-                      `
-                      <a class="product" id="`+item["id"]+`">
-                        <div class="product123 row border mb-2 p-4">
-                          <div class="col-3 text-center">
-                            <img src="`+url+`/get-product-picture/`+item['photoUrl']+`" style="height: 200px;" alt="">
-                          </div>
-                          <div class="col-7">
-                            <p class="product-name" style="font-weight: bold; font-size: x-large">`+ item["name"] +`</p>
-                            <p class="product-details" style="font-size: large">` + item["details"] + ` </p>
-                            <p style="font-size: larger; color: #4287f5">` + item["cost"] + `$</p>
-                          </div>
-                          <div class="col-2 text-muted">
-                            <h4 class="row">ANBARDA YOXDUR</h4>
-                          </div>
-                        </div>
-                      </a>
-                      `
-                    );
-                  else
-                    $('#product-list').append(
-                      `
-                      <a class="product" id="`+item["id"]+`" onclick="go(`+item["id"]+`)">
-                        <div class="product123 row border mb-2 p-4">
-                          <div class="col-3 text-center">
-                            <img src="`+url+`/get-product-picture/`+item['photoUrl']+`" style="height: 200px;" alt="">
-                          </div>
-                          <div class="col-9">
-                            <p class="product-name" style="font-weight: bold; font-size: x-large">`+ item["name"] +`</p>
-                            <p class="product-details" style="font-size: large">` + item["details"] + ` </p>
-                            <p style="font-size: larger; color: #4287f5">` + item["cost"] + `$</p>
-                          </div>
-                        </div>
-                      </a>
-                      `
-                    );
-                // });
-              });
-            }
-            else{
-              $('#product-list').append(
-                `
-                <h6 class="border p-3 container">Axtarışa uyğun məhsul tapılmadı... </h6>
-                `
-              );
-            }
-          },
-          error: function (XMLHttpRequest, textStatus, errorThrown){
-            console.log("Yükləyə bilmədi")
-          }
+    </header>
+    <!-- Topbar End -->
 
-        });
 
-      });
-      
-      $.get("header.html", function(fileData){
+    <!-- Navbar Start -->
+    <div class="container-fluid mb-5">
+        <div class="row border-top px-xl-5">
+            <div class="col-lg-3 d-none d-lg-block">
+                <a class="btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; margin-top: -1px; padding: 0 30px;">
+                    <h6 class="m-0">Kateqoriyalar</h6>
+                    <i class="fa fa-angle-down text-dark"></i>
+                </a>
+                <nav class="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
+                    <div class="navbar-nav w-100 overflow-hidden" style="height: 410px" id="category-list">
+                      <!-- CATEGORY list -->
+                    </div>
+                </nav>
+            </div>
+            <div class="col-lg-9">
+              <nav class="row navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
+                <a href="" class="text-decoration-none d-block d-lg-none">
+                    <h1 class="m-0 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
+                </a>
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                  <div class="navbar-nav mr-auto py-0">
+                    <a href="index.html" class="nav-item nav-link active">Əsas səhifə</a>
+                    <a href="contact.html" class="nav-item nav-link">Əlaqə</a>
+                  </div>
+                </div>
+              </nav>
+              <!-- Products Start -->
+              <div class="row container-fluid pt-5">
+                <!-- <div class="text-center mb-4">
+                    <h2 class="section-title px-5"><span class="px-2">Axtarışın Nəticələri</span></h2>
+                </div> -->
+                <div class="row px-xl-5 pb-3" id="filtered-product-list">
+                  <!-- <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+                      <div class="card product-item border-0 mb-4">
+                          <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                              <img class="img-fluid w-100" src="img/product-1.jpg" alt="">
+                          </div>
+                          <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                              <h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
+                              <div class="d-flex justify-content-center">
+                                  <h6>$123.00</h6><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                              </div>
+                          </div>
+                          <div class="card-footer d-flex justify-content-between bg-light border">
+                              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                              <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                          </div>
+                      </div>
+                  </div> -->
+                </div>
+              </div>
+              <!-- Products End -->
+            </div>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+    <!-- Footer Start -->
+    <footer></footer>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="./js/main.js"></script>
+    <script src="./js/constants.js"></script>
+    <script src="./js/filter.js"></script>
+    
+    <script>
+        $.get("header.html", function(fileData){
           $('header').html(fileData);
-      });
-
+        });
+        $.get("footer.html", function(fileData){
+          $('footer').html(fileData);
+        });
     </script>
 
-    <script src="./js/index.js"></script>
 
-  </body>
+</body>
+
 </html>
